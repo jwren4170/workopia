@@ -1,3 +1,3 @@
 <?php
 
-echo '<h1>Page Not Found</h1>';
+load_view('error/404');

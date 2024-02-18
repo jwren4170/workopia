@@ -1,5 +1,7 @@
 <?php
 
+define('ASSETS_ROOT', 'http://localhost/workopia/public/assets');
+
 /**
  * returns the project base url
  *

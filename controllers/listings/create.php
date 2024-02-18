@@ -1,3 +1,3 @@
 <?php
 
-echo '<h1>Listings Create</h1>';
+load_view('listings/create');
