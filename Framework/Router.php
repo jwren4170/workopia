@@ -1,5 +1,7 @@
 <?php
 
+namespace JWord\Framework;
+
 class Router
 {
     protected $routes = [];
@@ -9,17 +11,20 @@ class Router
      *
      * @param string $method
      * @param string $uri
-     * @param string $controller
+     * @param string $action
      * 
      * @return void
      * 
      */
-    public function register_route(string $method, string $uri, string $controller): void
+    public function register_route(string $method, string $uri, string $action): void
     {
+        list($controller, $controller_method) = explode('@', $action);
+
         $this->routes[] = [
             'method' => $method,
             'uri' => $uri,
-            'controller' => $controller
+            'controller' => $controller,
+            'controller_method' => $controller_method,
         ];
     }
 
@@ -103,11 +108,19 @@ class Router
      * @return void
      * 
      */
-    public function route(string $uri, string $method)
+    public function route(string $uri, string $method): void
     {
         foreach ($this->routes as $route) {
             if ($route['uri'] === $uri && $route['method'] === $method) {
-                require_once base_path($route['controller']);
+
+                // Extract controller and controller method
+                $controller = 'JWord\\App\\Controllers\\' . $route['controller'];
+                $controller_method = $route['controller_method'];
+
+                // Instantiate the controller and call the method
+                $controller_inst = new $controller();
+                $controller_inst->$controller_method();
+
                 return;
             }
         }

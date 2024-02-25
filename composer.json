@@ -1,0 +1,17 @@
+{
+    "name": "jword/workopia",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "jword"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "JWord\\Framework\\": "Framework/",
+            "JWord\\App\\": "App/"
+        }
+    },
+    "require": {}
+}

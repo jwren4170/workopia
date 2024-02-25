@@ -1,18 +1,20 @@
 <?php
-
+require_once '../vendor/autoload.php';
 require_once '../helpers.php';
-require_once base_path('Database.php');
+
+use JWord\Framework\Router;
+
 $config = require_once base_path('config/db.php');
 
-$db = new Database($config);
-
-require_once base_path('Router.php');
-
+// Instantiate router
 $router = new Router();
 
+// Get routes
 $routes = require_once base_path('routes.php');
 
+// Get current URI and HTTP method
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
 
+// Route the request
 $router->route($uri, $method);

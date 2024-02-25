@@ -1,7 +1,7 @@
 <?php
 
 define('ASSETS_ROOT', 'http://localhost/workopia/public/assets');
-
+define('SITE_TITLE', 'Workopia');
 /**
  * returns the project base url
  *
@@ -25,7 +25,7 @@ function base_path(string $path = ''): string
  */
 function load_view(string $name = '', array $data = []): void
 {
-    $view_path = base_path("views/$name.view.php");
+    $view_path = base_path("App/views/$name.view.php");
 
     if (file_exists($view_path)) {
         extract($data);
@@ -44,7 +44,7 @@ function load_view(string $name = '', array $data = []): void
  */
 function load_partial(string $name = ''): void
 {
-    $partial_path = base_path("views/partials/$name.php");
+    $partial_path = base_path("App/views/partials/$name.php");
 
     if (file_exists($partial_path))
         require_once $partial_path;
@@ -52,7 +52,15 @@ function load_partial(string $name = ''): void
         echo "View $name not found";
 }
 
-function format_salary($salary)
+/**
+ * Format listing salaries
+ *
+ * @param int $salary
+ * 
+ * @return string
+ * 
+ */
+function format_salary(int $salary): string
 {
     $fmt = new NumberFormatter('en_US', NumberFormatter::CURRENCY);
     $fmt->setAttribute(NumberFormatter::FRACTION_DIGITS, 0);
