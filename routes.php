@@ -1,8 +1,6 @@
 <?php
 
-return [
-    '/workopia/' => 'controllers/home.php',
-    '/workopia/listings' => 'controllers/listings/index.php',
-    '/workopia/listings/create' => 'controllers/listings/create.php',
-    '404' => 'controllers/error/404.php'
-];
+$router->get('/workopia/', 'controllers/home.php');
+$router->get('/workopia/listings', 'controllers/listings/index.php');
+$router->get('/workopia/listing', 'controllers/listings/show.php');
+$router->get('/workopia/listings/create', 'controllers/listings/create.php');

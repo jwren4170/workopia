@@ -23,13 +23,14 @@ function base_path(string $path = ''): string
  * @return void
  * 
  */
-function load_view(string $name = ''): void
+function load_view(string $name = '', array $data = []): void
 {
     $view_path = base_path("views/$name.view.php");
 
-    if (file_exists($view_path))
+    if (file_exists($view_path)) {
+        extract($data);
         require_once $view_path;
-    else
+    } else
         echo "View $name not found";
 }
 
@@ -51,6 +52,12 @@ function load_partial(string $name = ''): void
         echo "View $name not found";
 }
 
+function format_salary($salary)
+{
+    $fmt = new NumberFormatter('en_US', NumberFormatter::CURRENCY);
+    $fmt->setAttribute(NumberFormatter::FRACTION_DIGITS, 0);
+    return $fmt->formatCurrency($salary, 'USD');
+}
 
 /**
  * inspect values without stopping script
