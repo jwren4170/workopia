@@ -2,6 +2,8 @@
 
 namespace JWord\Framework;
 
+use JWord\App\Controllers\ErrorController;
+
 class Router
 {
     protected $routes = [];
@@ -85,21 +87,6 @@ class Router
     }
 
     /**
-     * Load error page
-     *
-     * @param int $http_code
-     * 
-     * @return void
-     * 
-     */
-    public function error(int $http_code = 404): void
-    {
-        http_response_code($http_code);
-        load_view("error/$http_code");
-        exit;
-    }
-
-    /**
      * Route the request
      *
      * @param string $uri
@@ -124,6 +111,6 @@ class Router
                 return;
             }
         }
-        $this->error();
+        ErrorController::not_found();
     }
 }
