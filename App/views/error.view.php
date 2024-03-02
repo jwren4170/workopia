@@ -16,6 +16,7 @@
         <p class="text-center text-2xl mb-4">
             <?= $message ?>
         </p>
+        <a class="text-center text-amber-900 block" href="/workopia/listings">Back to listings</a>
     </div>
 </section>
 

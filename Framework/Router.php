@@ -95,20 +95,51 @@ class Router
      * @return void
      * 
      */
-    public function route(string $uri, string $method): void
+    public function route(string $uri): void
     {
+        $request_method = $_SERVER['REQUEST_METHOD'];
+
         foreach ($this->routes as $route) {
-            if ($route['uri'] === $uri && $route['method'] === $method) {
 
-                // Extract controller and controller method
-                $controller = 'JWord\\App\\Controllers\\' . $route['controller'];
-                $controller_method = $route['controller_method'];
+            // Split current URI into segments
+            $uri_segments = explode('/', trim($uri, '/'));
 
-                // Instantiate the controller and call the method
-                $controller_inst = new $controller();
-                $controller_inst->$controller_method();
+            // Split route URI into segments
+            $route_segments = explode('/', trim($route['uri'], '/'));
 
-                return;
+            $match = true;
+
+            if (
+                count($uri_segments) === count($route_segments) &&
+                strtoupper($route['method']) === $request_method
+            ) {
+                $params = [];
+                for ($i = 0; $i < count($uri_segments); $i++) {
+                    if (
+                        $route_segments[$i] !== $uri_segments[$i] &&
+                        !preg_match('/\{(.+?)}/', $route_segments[$i])
+                    ) {
+                        $match = false;
+                        break;
+                    }
+
+                    // Check uri params and add to $params array
+                    if (preg_match('/\{(.+?)}/', $route_segments[$i], $matches)) {
+                        $params[$matches[1]] = $uri_segments[$i];
+                    }
+                }
+
+                if ($match) {
+                    // Extract controller and controller method
+                    $controller = 'JWord\\App\\Controllers\\' . $route['controller'];
+                    $controller_method = $route['controller_method'];
+
+                    // Instantiate the controller and call the method
+                    $controller_inst = new $controller();
+                    $controller_inst->$controller_method($params);
+
+                    return;
+                }
             }
         }
         ErrorController::not_found();
