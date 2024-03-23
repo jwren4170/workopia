@@ -96,3 +96,30 @@ function inspect_and_die(mixed $value): void
     die(var_dump($value));
     echo '</pre>';
 }
+
+/**
+ * Sanatize data
+ *
+ * @param string $data
+ * 
+ * @return string
+ * 
+ */
+function sanitize(string $data): string
+{
+    return filter_var(trim($data), FILTER_SANITIZE_SPECIAL_CHARS);
+}
+
+/**
+ * Redirect to given url
+ *
+ * @param string $url
+ * 
+ * @return void
+ * 
+ */
+function redirect(string $url): void
+{
+    header("Location: $url");
+    exit;
+}
