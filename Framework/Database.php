@@ -49,10 +49,10 @@ class Database
             $stmt = $this->conn->prepare($query);
             // Bind named parameters
             foreach ($params as $param => $value) {
-                $stmt->bindParam(':' . $param, $value);
-                // inspect_and_die($stmt);
+                $stmt->bindValue(':' . $param, $value);
             }
             $stmt->execute();
+
             return $stmt;
         } catch (PDOException $e) {
             throw new PDOException('Query failed to execute' . $e->getMessage());
