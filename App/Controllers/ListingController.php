@@ -77,14 +77,14 @@ class ListingController
         }
         if (!empty($errors))
             load_view('listings/create', ['errors' => $errors, 'listing' => $new_listing_data]);
+        else {
+            $fields = implode(', ', array_keys($new_listing_data));
+            $placeholders = implode(', :', array_keys($new_listing_data));
+            $query = "INSERT INTO listings ({$fields}) VALUES(:{$placeholders})";
 
+            $this->db->query($query, $new_listing_data);
 
-        $fields = implode(', ', array_keys($new_listing_data));
-        $placeholders = implode(', :', array_keys($new_listing_data));
-        $query = "INSERT INTO listings ({$fields}) VALUES(:{$placeholders})";
-
-        $this->db->query($query, $new_listing_data);
-
-        redirect('/workopia/listings');
+            redirect('/workopia/listings');
+        }
     }
 }
