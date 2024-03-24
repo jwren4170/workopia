@@ -87,4 +87,28 @@ class ListingController
             redirect('/workopia/listings');
         }
     }
+
+    /**
+     * Remove listing
+     *
+     * @param mixed $params
+     * 
+     * @return [type]
+     * 
+     */
+    public function destroy($params)
+    {
+        $id = $params['id'] ?? '';
+        $params = [
+            'id' => $id
+        ];
+
+        $listing = $this->db->query('DELETE FROM listings WHERE id = :id', ['id' => $id]);
+        if (!$listing) {
+            ErrorController::not_found('Listing not found');
+            return;
+        }
+
+        redirect('/workopia/listings');
+    }
 }
