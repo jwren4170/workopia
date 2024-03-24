@@ -64,7 +64,7 @@ function format_salary(mixed $salary): string
 {
     $fmt = new NumberFormatter('en_US', NumberFormatter::CURRENCY);
     $fmt->setAttribute(NumberFormatter::FRACTION_DIGITS, 0);
-    return $fmt->formatCurrency(settype($salary, 'float'), 'USD');
+    return $fmt->formatCurrency(floatval($salary), 'USD');
 }
 
 /**
