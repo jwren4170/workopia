@@ -109,6 +109,33 @@ class ListingController
             return;
         }
 
+        $_SESSION['success_message'] = 'Listing deleted successfully';
+
         redirect('/workopia/listings');
+    }
+
+    /**
+     * Show edit form
+     *
+     * @param mixed $params
+     * 
+     * @return [type]
+     * 
+     */
+    public function edit($params)
+    {
+        $id = $params['id'] ?? '';
+        $params = [
+            'id' => $id
+        ];
+
+        $listing = $this->db->query('SELECT * FROM listings WHERE id = :id', $params)->fetch();
+
+        if (!$listing) {
+            ErrorController::not_found('Listing not found');
+            return;
+        }
+
+        load_view('listings/edit', ['listing' => $listing]);
     }
 }

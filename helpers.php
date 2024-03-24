@@ -55,16 +55,16 @@ function load_partial(string $name = ''): void
 /**
  * Format listing salaries
  *
- * @param int $salary
+ * @param mixed $salary
  * 
  * @return string
  * 
  */
-function format_salary(int $salary): string
+function format_salary(mixed $salary): string
 {
     $fmt = new NumberFormatter('en_US', NumberFormatter::CURRENCY);
     $fmt->setAttribute(NumberFormatter::FRACTION_DIGITS, 0);
-    return $fmt->formatCurrency($salary, 'USD');
+    return $fmt->formatCurrency(settype($salary, 'float'), 'USD');
 }
 
 /**
