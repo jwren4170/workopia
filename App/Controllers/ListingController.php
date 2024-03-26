@@ -138,4 +138,78 @@ class ListingController
 
         load_view('listings/edit', ['listing' => $listing]);
     }
+
+    /**
+     * Update listing
+     *
+     * @param mixed $params
+     * 
+     * @return void 
+     * 
+     */
+    public function update($params)
+    {
+        $id = $params['id'] ?? '';
+        $params = [
+            'id' => $id
+        ];
+
+        $allowed_fields = [
+            'title',
+            'description',
+            'salary',
+            'tags',
+            'company',
+            'address',
+            'city',
+            'state',
+            'phone',
+            'email',
+            'requirements',
+            'benefits'
+        ];
+
+        $listing = $this->db->query('SELECT * FROM listings WHERE id = :id', $params)->fetch();
+        if (!$listing) {
+            ErrorController::not_found('Listing not found');
+            return;
+        }
+
+        $update_values = [];
+
+        $update_values = array_intersect_key($_POST, array_flip($allowed_fields));
+
+        $update_values = array_map('sanitize', $update_values);
+
+        $required_fields = ['title', 'description', 'salary', 'email', 'city', 'state'];
+
+        $errors = [];
+        foreach ($required_fields as $field) {
+            if (empty($update_values[$field]) || !Validation::string($update_values[$field])) {
+                $errors[$field] = ucfirst($field) . " is required";
+            }
+        }
+
+        if (!empty($errors)) {
+            load_view('listings/edit', ['errors' => $errors, 'listing' => $listing]);
+            exit;
+        } else {
+            $update_fields = [];
+
+            foreach (array_keys($update_values) as $field) {
+                $update_fields[] = "{$field} = :{$field}";
+            }
+
+            $update_fields = implode(', ', $update_fields);
+
+            $update_values['id'] = $id;
+            $query = "UPDATE listings SET {$update_fields} WHERE id = :id";
+
+            $this->db->query($query, $update_values);
+
+            $_SESSION['success_message'] = 'Listing updated successfully';
+
+            redirect('/workopia/listings/' . $id);
+        }
+    }
 }
