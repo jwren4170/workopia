@@ -18,11 +18,7 @@
             <h2 class="text-2xl font-bold mb-6 text-center text-gray-500">
                 Job Info
             </h2>
-            <?php if (isset($errors)) : ?>
-                <?php foreach ($errors as $error) : ?>
-                    <div class="message text-red-950 my-3"><?= $error ?></div>
-                <?php endforeach; ?>
-            <?php endif; ?>
+            <?= load_partial('errors', ['errors' => $errors ?? []]) ?>
             <div class="mb-4">
                 <input type="text" name="title" placeholder="Job Title" class="w-full px-4 py-2 border rounded focus:outline-none" value="<?= $listing->title ?? '' ?>" />
             </div>
