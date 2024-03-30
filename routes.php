@@ -15,9 +15,6 @@ $router->delete('/workopia/listings/{id}', 'ListingController@destroy');
 // GET user routes
 $router->get('/workopia/auth/login', 'UserController@login');
 $router->get('/workopia/auth/register', 'UserController@create');
-<<<<<<< HEAD
 
 // POST user routes
 $router->post('/workopia/auth/register', 'UserController@store');
-=======
->>>>>>> afc3e0d4841fa4a073b37520d35561a2f3c407e0

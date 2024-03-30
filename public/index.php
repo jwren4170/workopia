@@ -1,10 +1,12 @@
 <?php
-session_start();
-
-require_once '../vendor/autoload.php';
-require_once '../helpers.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use JWord\Framework\Router;
+use JWord\Framework\Session;
+
+Session::start();
+
+require_once '../helpers.php';
 
 $config = require_once base_path('config/db.php');
 

@@ -4,6 +4,7 @@ namespace JWord\App\Controllers;
 
 use JWord\Framework\Database;
 use JWord\Framework\Validation;
+use JWord\Framework\Session;
 
 class UserController
 {
@@ -95,16 +96,53 @@ class UserController
                 ]
             );
             exit;
-        } else {
-            // $password = password_hash($password, PASSWORD_DEFAULT);
-            // $this->db->query('users', [
-            //     'name' => $name,
-            //     'email' => $email,
-            //     'city' => $city,
-            //     'state' => $state,
-            //     'password' => $password
-            // ]);
-            inspect_and_die('Storing user data');
         }
+
+        // check if email already exists
+        $params = [
+            'email' => $email
+        ];
+
+        $user = $this->db->query('SELECT * FROM users WHERE email = :email', $params)->fetch();
+
+        if ($user) {
+            $errors['email'] = 'Email already exists';
+            load_view(
+                'users/create',
+                [
+                    'errors' => $errors,
+                    'user' => [
+                        'name' => $name,
+                        'email' => $email,
+                        'city' => $city,
+                        'state' => $state
+                    ]
+                ]
+            );
+            exit;
+        }
+
+        // insert user
+        $params = [
+            'name' => $name,
+            'email' => $email,
+            'city' => $city,
+            'state' => $state,
+            'password' => password_hash($password, PASSWORD_DEFAULT)
+        ];
+
+        $this->db->query('INSERT INTO users (name, email, city, state, password) VALUES (:name, :email, :city, :state, :password)', $params);
+
+        $user_id = $this->db->conn->lastInsertId();
+
+        Session::set('user', [
+            'id' => $user_id,
+            'name' => $name,
+            'email' => $email,
+            'city' => $city,
+            'state' => $state
+        ]);
+
+        redirect('/workopia');
     }
 }
