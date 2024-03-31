@@ -18,3 +18,5 @@ $router->get('/workopia/auth/register', 'UserController@create');
 
 // POST user routes
 $router->post('/workopia/auth/register', 'UserController@store');
+$router->post('/workopia/auth/logout', 'UserController@logout');
+$router->post('/workopia/auth/login', 'UserController@authenticate');

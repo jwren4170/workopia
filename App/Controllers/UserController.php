@@ -124,6 +124,7 @@ class UserController
 
         // insert user
         $params = [
+            'id' => null,
             'name' => $name,
             'email' => $email,
             'city' => $city,
@@ -131,16 +132,107 @@ class UserController
             'password' => password_hash($password, PASSWORD_DEFAULT)
         ];
 
-        $this->db->query('INSERT INTO users (name, email, city, state, password) VALUES (:name, :email, :city, :state, :password)', $params);
+        $this->db->query('INSERT INTO users (id, name, email, city, state, password) VALUES (:id, :name, :email, :city, :state, :password)', $params);
 
-        $user_id = $this->db->conn->lastInsertId();
+        $id = $this->db->conn->lastInsertId();
 
         Session::set('user', [
-            'id' => $user_id,
+            'id' => $id,
             'name' => $name,
             'email' => $email,
             'city' => $city,
             'state' => $state
+        ]);
+
+        redirect('/workopia');
+    }
+
+    /**
+     * Logout user
+     *
+     * @return void
+     * 
+     */
+    public function logout(): void
+    {
+        $params = session_get_cookie_params();
+
+        setcookie('PHPSESSID', '', time() - 3600, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
+
+        Session::clear('user');
+        Session::destroy();
+
+        redirect('/workopia');
+    }
+
+    /**
+     * Authenticate user based on email and password
+     *
+     * @return void
+     * 
+     */
+    public function authenticate(): void
+    {
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+
+        $errors = [];
+
+        // Validation
+        if (!Validation::email($email)) {
+            $errors['email'] = 'Please provide a valid email address';
+        }
+
+        if (!Validation::string($password, 6, 20)) {
+            $errors['password'] = 'Password must be between 6 and 20 characters';
+        }
+
+        if (!empty($errors)) {
+            load_view(
+                'users/login',
+                [
+                    'errors' => $errors
+                ]
+            );
+            exit;
+        }
+
+        // check if email already exists
+        $params = [
+            'email' => $email
+        ];
+
+        $user = $this->db->query('SELECT * FROM users WHERE email = :email', $params)->fetch();
+
+        if (!$user) {
+            $errors['email'] = 'Either email or password is incorrect';
+            load_view(
+                'users/login',
+                [
+                    'errors' => $errors
+                ]
+            );
+            exit;
+        }
+
+        // check password
+        if (!password_verify($password, $user->password)) {
+            $errors['password'] = 'Either email or password is incorrect';
+            load_view(
+                'users/login',
+                [
+                    'errors' => $errors
+                ]
+            );
+            exit;
+        }
+
+        Session::set('user', [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'city' => $user->city,
+            'state' => $user->state
         ]);
 
         redirect('/workopia');
