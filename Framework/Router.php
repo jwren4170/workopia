@@ -2,7 +2,10 @@
 
 namespace JWord\Framework;
 
+use JWord\Framework\Middleware\Authorize;
+
 use JWord\App\Controllers\ErrorController;
+
 
 class Router
 {
@@ -14,11 +17,12 @@ class Router
      * @param string $method
      * @param string $uri
      * @param string $action
+     * @param array $middleware
      * 
      * @return void
      * 
      */
-    public function register_route(string $method, string $uri, string $action): void
+    public function register_route(string $method, string $uri, string $action, array $middleware = []): void
     {
         list($controller, $controller_method) = explode('@', $action);
 
@@ -27,6 +31,7 @@ class Router
             'uri' => $uri,
             'controller' => $controller,
             'controller_method' => $controller_method,
+            'middleware' => $middleware
         ];
     }
 
@@ -35,13 +40,14 @@ class Router
      *
      * @param string $uri
      * @param string $method
+     * @param array $middleware
      * 
      * @return void
      * 
      */
-    public function get(string $uri, string $controller): void
+    public function get(string $uri, string $controller, array $middleware = []): void
     {
-        $this->register_route('GET', $uri, $controller);
+        $this->register_route('GET', $uri, $controller, $middleware);
     }
 
     /**
@@ -49,13 +55,14 @@ class Router
      *
      * @param string $uri
      * @param string $method
+     * @param array $middleware
      * 
      * @return void
      * 
      */
-    public function post(string $uri, string $controller): void
+    public function post(string $uri, string $controller, array $middleware = []): void
     {
-        $this->register_route('POST', $uri, $controller);
+        $this->register_route('POST', $uri, $controller, $middleware);
     }
 
     /**
@@ -63,13 +70,14 @@ class Router
      *
      * @param string $uri
      * @param string $method
+     * @param array $middleware
      * 
      * @return void
      * 
      */
-    public function put(string $uri, string $controller): void
+    public function put(string $uri, string $controller, array $middleware = []): void
     {
-        $this->register_route('PUT', $uri, $controller);
+        $this->register_route('PUT', $uri, $controller, $middleware);
     }
 
     /**
@@ -77,13 +85,14 @@ class Router
      *
      * @param string $uri
      * @param string $method
+     * @param array $middleware
      * 
      * @return void
      * 
      */
-    public function delete(string $uri, string $controller): void
+    public function delete(string $uri, string $controller, array $middleware = []): void
     {
-        $this->register_route('DELETE', $uri, $controller);
+        $this->register_route('DELETE', $uri, $controller, $middleware);
     }
 
     /**
@@ -135,6 +144,11 @@ class Router
                 }
 
                 if ($match) {
+                    // Loop through middleware array
+                    foreach ($route['middleware'] as $middleware) {
+                        (new Authorize())->handle($middleware);
+                    }
+
                     // Extract controller and controller method
                     $controller = 'JWord\\App\\Controllers\\' . $route['controller'];
                     $controller_method = $route['controller_method'];
