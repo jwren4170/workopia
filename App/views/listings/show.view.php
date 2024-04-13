@@ -18,7 +18,7 @@
                 <i class="fa fa-arrow-alt-circle-left"></i>
                 Back To Listings
             </a>
-            <?php if (\JWord\Framework\Authorization::isOwner($listing->user_id)) : ?>
+            <?php if (\JWord\Framework\Authorization::is_owner($listing->user_id)) : ?>
                 <div class="flex space-x-4 ml-4">
                     <a href="/workopia/listings/edit/<?= $listing->id ?>" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded">Edit</a>
                     <!-- Delete Form -->

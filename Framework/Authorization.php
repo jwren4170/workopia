@@ -13,7 +13,7 @@ class Authorization
      *
      * @return bool
      */
-    public static function isOwner(int $resource_id): bool
+    public static function is_owner(int $resource_id): bool
     {
         $session_user = Session::get('user');
         if (isset($session_user['id']) && $session_user['id'] !== null) {

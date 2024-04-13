@@ -154,7 +154,7 @@ class ListingController
         }
 
         // check if listing belongs to user
-        if (!Authorization::isOwner($listing->user_id)) {
+        if (!Authorization::is_owner($listing->user_id)) {
             Session::set_flash_message('error_message', 'You do not have permission to update this listing');
             return redirect('/workopia/listings/' . $listing->id);
         }
@@ -200,7 +200,7 @@ class ListingController
         }
 
         // check if listing belongs to user
-        if (!Authorization::isOwner($listing->user_id)) {
+        if (!Authorization::is_owner($listing->user_id)) {
             Session::set_flash_message('error_message', 'You do not have permission to update this listing');
             return redirect('/workopia/listings/' . $listing->id);
         }
