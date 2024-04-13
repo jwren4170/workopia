@@ -3,7 +3,9 @@
 namespace JWord\App\Controllers;
 
 use JWord\Framework\Database;
+use JWord\Framework\Session;
 use JWord\Framework\Validation;
+use JWord\Framework\Authorization;
 
 class ListingController
 {
@@ -17,7 +19,7 @@ class ListingController
 
     public function index()
     {
-        $listings = $this->db->query('SELECT * FROM listings')->fetchAll();
+        $listings = $this->db->query('SELECT * FROM listings ORDER BY created_at DESC')->fetchAll();
 
         load_view('listings/index', ['listings' => $listings]);
     }
@@ -66,7 +68,7 @@ class ListingController
 
         $new_listing_data = array_map('sanitize', $new_listing_data);
 
-        $new_listing_data['user_id'] = 2;
+        $new_listing_data['user_id'] = Session::get('user')['id'];
 
         $errors = [];
         $required_fields = ['title', 'description', 'salary', 'email', 'city', 'state'];
@@ -83,6 +85,8 @@ class ListingController
             $query = "INSERT INTO listings ({$fields}) VALUES(:{$placeholders})";
 
             $this->db->query($query, $new_listing_data);
+
+            Session::set_flash_message('success_message', 'Listing created successfully');
 
             redirect('/workopia/listings');
         }
@@ -103,13 +107,24 @@ class ListingController
             'id' => $id
         ];
 
-        $listing = $this->db->query('DELETE FROM listings WHERE id = :id', ['id' => $id]);
+        $listing = $this->db->query('SELECT * FROM listings WHERE id = :id', $params)->fetch();
+
+        // check if listing exists
         if (!$listing) {
             ErrorController::not_found('Listing not found');
             return;
         }
 
-        $_SESSION['success_message'] = 'Listing deleted successfully';
+        // check if listing belongs to user
+        if (!Authorization::isOwner($listing->user_id)) {
+            Session::set_flash_message('error_message', 'You do not have permission to delete this listing');
+            return redirect('/workopia/listings/' . $listing->id);
+        }
+
+        // delete listing
+        $this->db->query('DELETE FROM listings WHERE id = :id', $params);
+
+        Session::set_flash_message('success_message', 'Listing deleted successfully');
 
         redirect('/workopia/listings');
     }
@@ -134,6 +149,12 @@ class ListingController
         if (!$listing) {
             ErrorController::not_found('Listing not found');
             return;
+        }
+
+        // check if listing belongs to user
+        if (!Authorization::isOwner($listing->user_id)) {
+            Session::set_flash_message('error_message', 'You do not have permission to update this listing');
+            return redirect('/workopia/listings/' . $listing->id);
         }
 
         load_view('listings/edit', ['listing' => $listing]);
@@ -169,10 +190,17 @@ class ListingController
             'benefits'
         ];
 
+        // check if listing exists
         $listing = $this->db->query('SELECT * FROM listings WHERE id = :id', $params)->fetch();
         if (!$listing) {
             ErrorController::not_found('Listing not found');
             return;
+        }
+
+        // check if listing belongs to user
+        if (!Authorization::isOwner($listing->user_id)) {
+            Session::set_flash_message('error_message', 'You do not have permission to update this listing');
+            return redirect('/workopia/listings/' . $listing->id);
         }
 
         $update_values = [];
@@ -207,7 +235,7 @@ class ListingController
 
             $this->db->query($query, $update_values);
 
-            $_SESSION['success_message'] = 'Listing updated successfully';
+            Session::set_flash_message('success_message', 'Listing updated successfully');
 
             redirect('/workopia/listings/' . $id);
         }

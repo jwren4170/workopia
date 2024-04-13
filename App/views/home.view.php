@@ -44,6 +44,7 @@
             <i class="fa fa-arrow-alt-circle-right"></i>
             Show All Jobs
         </a>
+    </div>
 </section>
 
 <!-- Bottom Banner -->
