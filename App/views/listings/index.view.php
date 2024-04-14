@@ -13,7 +13,17 @@
 <!-- Job Listings -->
 <section>
     <div class="container mx-auto p-4 mt-4">
-        <div class="text-center text-3xl mb-4 font-bold border border-gray-300 p-3">All Jobs</div>
+        <div class="text-center text-3xl mb-4 font-bold border border-gray-300 p-3">
+            <?php if (!empty($keywords) && !empty($location)) : ?>
+                Search Results for: <span style="color:grey;opacity:0.9;font-weight:400"><?= htmlspecialchars($keywords) ?> in <?= htmlspecialchars($location) ?></span>
+            <?php elseif (!empty($keywords)) : ?>
+                Search Results for: <span style="color:grey;opacity:0.9;font-weight:400"><?= htmlspecialchars($keywords) ?></span>
+            <?php elseif (!empty($location)) : ?>
+                Search Results in: <span style="color:grey;opacity:0.9;font-weight:400"><?= htmlspecialchars($location) ?></span>
+            <?php else : ?>
+                All Jobs
+            <?php endif; ?>
+        </div>
         <?= load_partial('message') ?>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <!-- Job Listings-->

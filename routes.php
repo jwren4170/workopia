@@ -7,6 +7,7 @@ $router->get('/workopia/', 'HomeController@index');
 $router->get('/workopia/listings', 'ListingController@index');
 $router->get('/workopia/listings/create', 'ListingController@create', ['auth']);
 $router->get('/workopia/listings/edit/{id}', 'ListingController@edit', ['auth']);
+$router->get('/workopia/listings/search', 'ListingController@search');
 $router->get('/workopia/listings/{id}', 'ListingController@show');
 
 
