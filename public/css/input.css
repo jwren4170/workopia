@@ -16,6 +16,7 @@
 }
 
 .showcase {
+  background-color: transparent;
   background-image: url('../images/showcase.jpg');
 }
 

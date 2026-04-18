@@ -1,6 +1,6 @@
 Now we will create and load the views for the routes that we created in the last lesson.
 
-Let's start with the listings/index view. 
+Let's start with the listings/index view.
 
 ### Listing Index View
 

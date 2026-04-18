@@ -1,3 +1,8 @@
-<?php
+<?= load_partial('head') ?>
+<?= load_partial('navbar') ?>
+<?= load_partial('top-banner') ?>
 
-echo 'Create Listing';
+<?= load_view('listings/create') ?>
+
+<?= load_partial('bottom-banner') ?>
+<?= load_partial('footer') ?>
