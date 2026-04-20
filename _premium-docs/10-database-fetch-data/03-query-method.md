@@ -23,7 +23,6 @@ Open the `Database.php` file and add this method:
       throw new Exception("Query execution failed: " . $e->getMessage());
     }
   }
-}
 ```
 
 This method will take in a query string that we pass into `prepare` and then execute it. It will return the statement object. If there is an error, it will throw an exception.

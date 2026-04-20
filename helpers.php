@@ -18,11 +18,12 @@ function base_path($path = '')
  * @param array $data
  * @return void
  */
-function load_view($name)
+function load_view($name, $data = [])
 {
-    $view_path = base_path("views/{$name}.view.php");
+    $view_path = base_path("App/views/{$name}.view.php");
     // Make sure path exists
     if (file_exists($view_path)) {
+        extract($data);
         require $view_path;
     } else {
         echo "View '{$name}' not found.";
@@ -38,7 +39,7 @@ function load_view($name)
  */
 function load_partial($name)
 {
-    $partial_path = base_path("views/partials/{$name}.php");
+    $partial_path = base_path("App/views/partials/{$name}.php");
 
     // Make sure path exists
     if (file_exists($partial_path)) {
@@ -72,4 +73,10 @@ function inspect_and_die($value)
     echo '<pre>';
     die(var_dump($value));
     echo '</pre>';
+}
+
+function format_salary($salary)
+{
+    $formatter = new NumberFormatter('en-US', NumberFormatter::CURRENCY);
+    return $formatter->formatCurrency($salary, 'USD');
 }

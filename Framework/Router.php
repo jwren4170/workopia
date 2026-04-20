@@ -1,5 +1,7 @@
 <?php
 
+namespace Framework;
+
 class Router
 {
     protected $routes = [];
@@ -12,12 +14,15 @@ class Router
      * @param string $controller
      * @return void
      */
-    public function registerRoute($method, $uri, $controller)
+    public function registerRoute($method, $uri, $action)
     {
+        list($controller, $controller_method) = explode('@', $action);
+
         $this->routes[] = [
             'method' => $method,
             'uri' => $uri,
-            'controller' => $controller
+            'controller' => $controller,
+            'controller_method' => $controller_method
         ];
     }
 
@@ -90,9 +95,23 @@ class Router
      */
     public function route($uri, $method)
     {
+        // Strip trailing slash
+        $uri = rtrim($uri, '/');
+        if ($uri === '') {
+            $uri = '/';
+        }
+
         foreach ($this->routes as $route) {
             if ($route['uri'] === $uri && $route['method'] === $method) {
-                require base_path($route['controller']);
+
+                // Extract controller and method from route
+                $controller = 'App\\Controllers\\' . $route['controller'];
+                $controller_method = $route['controller_method'];
+
+                // Instantiate the controller and call the method
+                $controllerInstance = new $controller();
+                $controllerInstance->$controller_method();
+
                 return;
             }
         }

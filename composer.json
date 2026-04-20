@@ -1,0 +1,16 @@
+{
+  "name": "jword/workopia",
+  "description": "Job listing application",
+  "authors": [
+    {
+      "name": "James Wren",
+      "email": "jwren4170@att.net"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Framework\\": "Framework/",
+      "App\\": "App/"
+    }
+  }
+}
