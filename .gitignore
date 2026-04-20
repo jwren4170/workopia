@@ -1,6 +1,8 @@
 /vendor
 /node_modules
-/config/db.php
+/config
+_premium-docs
+_workopia-theme
 .env
 .vscode
 .DS_Store
