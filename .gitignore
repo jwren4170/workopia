@@ -1,8 +1,8 @@
 /vendor
 /node_modules
 /config
-_premium-docs
-_workopia-theme
+01-premium-docs
+02-workopia-theme
 .env
 .vscode
 .DS_Store

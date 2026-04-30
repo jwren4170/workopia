@@ -1,3 +1,6 @@
+<?php load_partial('head'); ?>
+<?php load_partial('navbar'); ?>
+
 <!-- Post a Job Form Box -->
 <div class="flex justify-center items-center mt-20">
     <div class="bg-white shadow-md mx-6 p-8 rounded-lg w-full md:w-600">
@@ -55,3 +58,7 @@
         </form>
     </div>
 </div>
+
+
+<?php load_partial('bottom-banner') ?>
+<?php load_partial('footer') ?>

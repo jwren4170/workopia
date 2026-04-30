@@ -25,7 +25,7 @@
                             <?= $listing->tags ?>
                         </li>
                     </ul>
-                    <a href="/workopia/listing?id=<?= $listing->id ?>" class="block bg-indigo-100 hover:bg-indigo-200 shadow-sm px-5 py-2.5 border rounded w-full font-medium text-indigo-700 text-base text-center">
+                    <a href="/workopia/listings/<?= $listing->id ?>" class="block bg-indigo-100 hover:bg-indigo-200 shadow-sm px-5 py-2.5 border rounded w-full font-medium text-indigo-700 text-base text-center">
                         Details
                     </a>
                 </div>
