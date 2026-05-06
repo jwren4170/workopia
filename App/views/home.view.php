@@ -8,6 +8,7 @@
     <div class="gap-4 grid grid-cols-1 md:grid-cols-3 mb-6">
 
         <!-- Job Listings -->
+        <?php /** @var array $listings */ ?>
         <?php foreach ($listings as $listing): ?>
             <div class="bg-white shadow-md rounded-lg">
                 <div class="p-4">

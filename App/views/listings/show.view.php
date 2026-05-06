@@ -1,3 +1,6 @@
+<?php
+
+/** @var object $listing */ ?>
 <?php load_partial('head'); ?>
 <?php load_partial('navbar'); ?>
 <?php load_partial('top-banner'); ?>
@@ -10,9 +13,13 @@
                 Back To Listings
             </a>
             <div class="flex space-x-4 ml-4">
-                <a href="/edit" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded text-white">Edit</a>
+                <a href="/workopia/listings/edit/<?= $listing->id ?>" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded text-white">Edit</a>
+                <input type="hidden" name="_method" value="PUT">
+
                 <!-- Delete Form -->
-                <form method="POST">
+                <form method="POST" action="/workopia/listings/delete/<?= $listing->id ?>">
+                    <input type="hidden" name="_method" value="DELETE">
+
                     <button type="submit" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded text-white">Delete</button>
                 </form>
                 <!-- End Delete Form -->
@@ -55,7 +62,7 @@
         resume.
     </p>
     <a
-        href="mailto:<?= $listing->company ?>"
+        href="mailto:<?= $listing->email ?>"
         class="block bg-indigo-100 hover:bg-indigo-200 shadow-sm px-5 py-2.5 border rounded w-full font-medium text-indigo-700 text-base text-center cursor-pointer">
         Apply Now
     </a>

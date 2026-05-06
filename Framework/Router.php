@@ -80,7 +80,6 @@ class Router
      * Route the request
      *
      * @param string $uri
-     * @param string $method
      * @return void
      */
     public function route($uri)
@@ -91,6 +90,11 @@ class Router
         $uri = rtrim($uri, '/');
         if ($uri === '') {
             $uri = '/';
+        }
+
+        if ($requestMethod === 'POST' && isset($_POST['_method'])) {
+            // Override the request method with the value of _method
+            $requestMethod = strtoupper($_POST['_method']);
         }
 
         foreach ($this->routes as $route) {

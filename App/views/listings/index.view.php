@@ -5,8 +5,10 @@
 
 <div class="mx-auto mt-4 p-4 container">
     <div class="mb-4 p-3 border border-gray-300 font-bold text-3xl text-center">All Jobs</div>
+    <?php load_partial('message') ?>
     <div class="gap-4 grid grid-cols-1 md:grid-cols-3 mb-6">
         <!-- Job Listings --->
+        <?php /** @var array $listings */ ?>
         <?php foreach ($listings as $listing): ?>
             <div class="bg-white shadow-md rounded-lg">
                 <div class="p-4">

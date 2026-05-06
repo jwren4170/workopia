@@ -18,7 +18,7 @@ function base_path($path = '')
  * @param array $data
  * @return void
  */
-function load_view($name, $data = [])
+function load_view(string $name, array $data = [])
 {
     $view_path = base_path("App/views/{$name}.view.php");
     // Make sure path exists
@@ -37,16 +37,46 @@ function load_view($name, $data = [])
  * @param array $data
  * @return void
  */
-function load_partial($name)
+function load_partial(string $name, array $data = [])
 {
     $partial_path = base_path("App/views/partials/{$name}.php");
 
     // Make sure path exists
     if (file_exists($partial_path)) {
+        extract($data);
         require $partial_path;
     } else {
         echo "Partial '{$name}' not found.";
     }
+}
+
+function format_salary(float | string $salary)
+{
+    $formatter = new NumberFormatter('en-US', NumberFormatter::CURRENCY);
+    return ($formatter->formatCurrency((float)$salary, 'USD'));
+}
+
+/**
+ * Sanitize data
+ *
+ * @param string $dirty
+ * @return string
+ */
+function sanitize(string $dirty)
+{
+    return filter_var(trim($dirty), FILTER_SANITIZE_SPECIAL_CHARS);
+}
+
+/**
+ * Redirect to a given URL
+ *
+ * @param string $url
+ * @return void
+ */
+function redirect($url)
+{
+    header("Location: {$url}");
+    exit;
 }
 
 /**
@@ -55,7 +85,7 @@ function load_partial($name)
  * @param array $values
  * @return void
  */
-function inspect($value)
+function inspect(mixed $value)
 {
     echo '<pre>';
     var_dump($value);
@@ -68,15 +98,8 @@ function inspect($value)
  * @param array $values
  * @return void
  */
-function inspect_and_die($value)
+function inspect_and_die(mixed $value)
 {
     echo '<pre>';
     die(var_dump($value));
-    echo '</pre>';
-}
-
-function format_salary($salary)
-{
-    $formatter = new NumberFormatter('en-US', NumberFormatter::CURRENCY);
-    return $formatter->formatCurrency($salary, 'USD');
 }
