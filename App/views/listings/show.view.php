@@ -6,9 +6,10 @@
 <?php load_partial('top-banner'); ?>
 
 <section class="mx-auto mt-4 p-4 container">
+    <?php load_partial('message') ?>
     <div class="bg-white shadow-md p-3 rounded-lg">
         <div class="flex justify-between items-center">
-            <a class="block p-4 text-blue-700" href="/listings">
+            <a class="block p-4 text-blue-700" href="/workopia/listings">
                 <i class="fa-arrow-alt-circle-left fa"></i>
                 Back To Listings
             </a>
